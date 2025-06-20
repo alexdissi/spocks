@@ -1,0 +1,52 @@
+export interface StockInfo {
+  ticker: string
+  isin?: string
+  name: string
+  description?: string
+  price: number
+  low: number
+  high: number
+  currency: string
+  exchange: string
+  sector: string
+  industry: string
+  color?: string
+  foundedYear?: number
+  website?: string
+  location?: string
+  logo?: string
+  dividendRate?: number
+  dividendReporting: string
+  dividendYield?: number
+  dividendRateForecast?: number
+  sharesHeldByInstitutions?: number
+  marketCap?: number
+  eps?: number
+  revenue?: string
+  peRatio?: number
+  pegRatio?: number
+  nextEarningsDate?: string
+  numberOfEmployees?: number
+  lastSctr?: number
+  lastUpdate: string
+  news: Array<{
+    title: string
+    publisher: string
+    link: string
+    providerPublishTime: number
+  }>
+  revenuePerShare?: number
+  dividendExDate?: string
+  rsi?: number
+  quarterlyEarnings?: Array<{
+    fiscalPeriodEndDate: string
+    earnings: number
+    estimatedEarnings: number
+    fiscalPeriod: string
+    estimatedEPS: number
+    actualEPS: number
+    estimatedSales: number
+    actualSales: number
+    earningsDate?: string
+  }>
+}
