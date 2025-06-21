@@ -37,14 +37,14 @@ export default function StockHoverModal({ ticker }: { ticker: string }) {
 
       <CardContent className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-4">
-            <TabsTrigger value="info" className="flex items-center gap-1 p-3">
+          <TabsList className="grid w-full grid-cols-5 h-16">
+            <TabsTrigger value="info" className="flex items-center gap-1">
               <Info className="w-4 h-4" /> Info
             </TabsTrigger>
-            <TabsTrigger value="data" className="flex items-center gap-1 p-3">
+            <TabsTrigger value="data" className="flex items-center gap-1">
               <PieChart className="w-4 h-4" /> Data
             </TabsTrigger>
-            <TabsTrigger value="chart" className="flex items-center gap-1 p-3">
+            <TabsTrigger value="chart" className="flex items-center gap-1">
               <BarChart3 className="w-4 h-4" /> Chart
             </TabsTrigger>
             <TabsTrigger
@@ -52,28 +52,28 @@ export default function StockHoverModal({ ticker }: { ticker: string }) {
               className="flex items-center gap-1 p-3">
               <Calendar className="w-4 h-4" /> Quarterly
             </TabsTrigger>
-            <TabsTrigger value="news" className="flex items-center gap-1 p-3">
+            <TabsTrigger value="news" className="flex items-center gap-1">
               <Newspaper className="w-4 h-4" /> News
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="info" className="pb-4 mt-0">
+          <TabsContent value="info">
             <StockInfoTab data={data} />
           </TabsContent>
 
-          <TabsContent value="data" className="pb-4 mt-0">
+          <TabsContent value="data">
             <StockDataTab data={data} />
           </TabsContent>
 
-          <TabsContent value="chart" className="pb-4 mt-0">
+          <TabsContent value="chart">
             <TradingViewChart symbol={data.ticker} />
           </TabsContent>
 
-          <TabsContent value="quarterly" className="pb-4 mt-0">
+          <TabsContent value="quarterly">
             <StockQuarterlyTab data={data} />
           </TabsContent>
 
-          <TabsContent value="news" className="pb-4 mt-0">
+          <TabsContent value="news">
             <StockNewsTab data={data} />
           </TabsContent>
         </Tabs>

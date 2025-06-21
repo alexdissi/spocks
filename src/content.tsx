@@ -18,21 +18,38 @@ export const config: PlasmoCSConfig = {
 
 const queryClient = new QueryClient()
 
-const STOCKS: Record<string, string> = {
-  Apple: "AAPL",
-  Tesla: "TSLA",
-  Microsoft: "MSFT",
-  Amazon: "AMZN",
-  AAPL: "AAPL",
-  TSLA: "TSLA",
-  MSFT: "MSFT",
-  AMZN: "AMZN"
+const detectTickers = async (html: string): Promise<Record<string, string>> => {
+  try {
+    const res = await fetch("http://localhost:8080/api/price/detect", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ html })
+    })
+
+    if (!res.ok) return {}
+
+    const matches = await res.json()
+    const map: Record<string, string> = {}
+
+    for (const match of matches) {
+      map[match.matchedText] = match.ticker
+    }
+
+    return map
+  } catch (e) {
+    console.error("Error detecting tickers:", e)
+    return {}
+  }
 }
 
 const injectPopover = (node: Text, label: string, ticker: string) => {
   const parent = node.parentElement
 
   const isUnsafeTag = ["A", "BUTTON"].includes(parent?.tagName || "")
+  if (isUnsafeTag || !parent) return
+
   const safeWrapper = document.createElement("span")
   safeWrapper.textContent = label
 
@@ -51,11 +68,9 @@ const injectPopover = (node: Text, label: string, ticker: string) => {
   const before = document.createTextNode(parts[0])
   const after = document.createTextNode(parts[1] || "")
 
-  if (parent) {
-    parent.replaceChild(after, node)
-    parent.insertBefore(finalContainer, after)
-    parent.insertBefore(before, finalContainer)
-  }
+  parent.replaceChild(after, node)
+  parent.insertBefore(finalContainer, after)
+  parent.insertBefore(before, finalContainer)
 
   const root = createRoot(reactMount)
   root.render(
@@ -74,18 +89,29 @@ const injectPopover = (node: Text, label: string, ticker: string) => {
   )
 }
 
-const run = () => {
+const run = async () => {
+  const html = document.body.innerHTML
+  const STOCKS = await detectTickers(html)
+
+  if (!Object.keys(STOCKS).length) return
+
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+  const targets: Array<{ node: Text; label: string; ticker: string }> = []
+
   while (walker.nextNode()) {
     const node = walker.currentNode as Text
     if (!node?.nodeValue) continue
 
     for (const label in STOCKS) {
       if (node.nodeValue.includes(label)) {
-        injectPopover(node, label, STOCKS[label])
-        break
+        targets.push({ node, label, ticker: STOCKS[label] })
+        break // éviter doublons sur même node
       }
     }
+  }
+
+  for (const { node, label, ticker } of targets) {
+    injectPopover(node, label, ticker)
   }
 }
 

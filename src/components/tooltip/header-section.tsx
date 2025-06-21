@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { CardHeader, CardTitle } from "@/components/ui/card"
 import type { StockInfo } from "@/interfaces/stocks"
 import { formatCurrency } from "@/lib/utils"
+import someCoolImage from "data-base64:~assets/logo.png"
 import { TrendingDown, TrendingUp } from "lucide-react"
 import { useState } from "react"
 
@@ -61,6 +62,7 @@ export function HeaderSection({ data }: HeaderSectionProps) {
             )}
           </div>
         </div>
+        <img src={someCoolImage} alt="Spocks logo" className="w-30 h-20" />
       </div>
 
       <div className="flex items-center justify-between mt-4">
