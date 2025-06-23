@@ -1,15 +1,12 @@
-import "./style.css"
-import "@/styles/globals.css"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-import { Button } from "./components/ui/button"
-import { CountButton } from "./features/count-button"
+import App from "./app"
 
-function IndexPopup() {
+export default function Popup() {
+  const queryClient = new QueryClient()
   return (
-    <div className="plasmo-flex plasmo-items-center plasmo-justify-center plasmo-h-16 plasmo-w-40">
-      <Button>CLICK ME</Button>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   )
 }
-
-export default IndexPopup
